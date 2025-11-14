@@ -65,12 +65,12 @@ def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial):
     subprocess.Popen([chrome_path, exatto_url])
     time.sleep(3.5)
 
-    # Login
-    pyautogui.click(x=582, y=427)
+    # Login com coordenadas ajustadas
+    pyautogui.click(x=658, y=407)  # Campo usuário
     pyautogui.hotkey("ctrl", "a"); pyautogui.press("backspace")
     pyautogui.write(login)
 
-    pyautogui.click(x=587, y=487)
+    pyautogui.click(x=477, y=470)  # Campo senha
     pyautogui.hotkey("ctrl", "a"); pyautogui.press("backspace")
     pyautogui.write(senha)
 
