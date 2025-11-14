@@ -112,6 +112,11 @@ def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial):
         pyautogui.scroll(-1000)
         time.sleep(1)
 
+    # --- LIMPEZA DE ARQUIVOS ANTIGOS ---
+    for f in os.listdir(caminho_downloads):
+        if f.startswith("Result") and f.endswith(".xls"):
+            os.remove(os.path.join(caminho_downloads, f))
+
     # Exportar
     pyautogui.click(x=1052, y=482)
     time.sleep(5)  # espera o download terminar
@@ -174,4 +179,3 @@ for nome_loja, config in lojas.items():
         config["setinhas"],
         config["tecla_inicial"]
     )
-
