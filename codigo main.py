@@ -66,11 +66,11 @@ def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial):
     time.sleep(3.5)
 
     # Login com coordenadas ajustadas
-    pyautogui.click(x=658, y=407)  # Campo usuário
+    pyautogui.click(x=697, y=423)  # Campo usuário
     pyautogui.hotkey("ctrl", "a"); pyautogui.press("backspace")
     pyautogui.write(login)
 
-    pyautogui.click(x=477, y=470)  # Campo senha
+    pyautogui.click(x=473, y=490)  # Campo senha
     pyautogui.hotkey("ctrl", "a"); pyautogui.press("backspace")
     pyautogui.write(senha)
 
