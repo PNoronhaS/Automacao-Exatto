@@ -7,28 +7,35 @@ from datetime import datetime, timedelta
 from openpyxl import load_workbook
 import shutil
 
-# Configuração das lojas
+# Configuração das lojas com coordenadas do Controle de Caixa
 lojas = {
     "Mooca": {
-        "login": "ljmooca", "senha": "luc1549", "setinhas": 9, "tecla_inicial": "m"
+        "login": "ljmooca", "senha": "luc1549", "setinhas": 9, "tecla_inicial": "m",
+        "controle_caixa": (324, 504)
     },
     "Lorena": {
-        "login": "LJALORENA", "senha": "luc1549", "setinhas": 8, "tecla_inicial": "m"
+        "login": "LJALORENA", "senha": "luc1549", "setinhas": 8, "tecla_inicial": "m",
+        "controle_caixa": (332, 536)
     },
     "Alto de Pinheiros": {
-        "login": "LJALTOPINHEIROS", "senha": "AVATIM231", "setinhas": 6, "tecla_inicial": "m"
+        "login": "LJALTOPINHEIROS", "senha": "AVATIM231", "setinhas": 6, "tecla_inicial": "m",
+        "controle_caixa": (359, 532)
     },
     "Ibirapuera": {
-        "login": "LJIBIRAPUERA", "senha": "AVATIM123", "setinhas": 7, "tecla_inicial": "f"
+        "login": "LJIBIRAPUERA", "senha": "AVATIM123", "setinhas": 7, "tecla_inicial": "m",
+        "controle_caixa": (361, 535)
     },
     "Perdizes": {
-        "login": "LJPERDIZES", "senha": "LUC1549", "setinhas": 10, "tecla_inicial": "f"
+        "login": "LJF2PERDIZES", "senha": "avatim123", "setinhas": 10, "tecla_inicial": "f",
+        "controle_caixa": (398, 501)
     },
     "Leopoldina": {
-        "login": "LJVLEOPOLDINA", "senha": "AVATIM123", "setinhas": 12, "tecla_inicial": "f"
+        "login": "LJVLEOPOLDINA", "senha": "AVATIM123", "setinhas": 12, "tecla_inicial": "f",
+        "controle_caixa": (361, 504)
     },
     "Santana": {
-        "login": "LJF2SANTANA", "senha": "AVATIM123", "setinhas": 11, "tecla_inicial": "f"
+        "login": "LJF2SANTANA", "senha": "AVATIM123", "setinhas": 11, "tecla_inicial": "f",
+        "controle_caixa": (365, 506)
     }
 }
 
@@ -58,7 +65,7 @@ print(f"📅 Período: {DATA_INICIAL} até {DATA_FINAL}")
 # -------------------------------
 # Função para processar uma loja
 # -------------------------------
-def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial):
+def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial, controle_caixa):
     print(f"\n🔄 Processando loja: {nome_loja}")
 
     # Abre navegador
@@ -89,7 +96,8 @@ def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial):
     # Consultas > Controle de Caixa
     pyautogui.click(x=276, y=253)  # Botão Consultas
     time.sleep(1)
-    pyautogui.click(x=324, y=504)  # Botão Controle de Caixa
+    x_cc, y_cc = controle_caixa
+    pyautogui.click(x=x_cc, y=y_cc)  # Botão Controle de Caixa
     time.sleep(2)
 
     # Preenche datas
@@ -177,5 +185,6 @@ for nome_loja, config in lojas.items():
         config["login"],
         config["senha"],
         config["setinhas"],
-        config["tecla_inicial"]
+        config["tecla_inicial"],
+        config["controle_caixa"]
     )
