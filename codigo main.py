@@ -7,51 +7,28 @@ from datetime import datetime, timedelta
 from openpyxl import load_workbook
 import shutil
 
-# Configuração das lojas com coordenadas do Controle de Caixa
+# Configuração das lojas
 lojas = {
-    "Mooca": {
-        "login": "ljmooca", "senha": "luc1549", "setinhas": 9, "tecla_inicial": "m",
-        "controle_caixa": (324, 504)
-    },
-    "Lorena": {
-        "login": "LJALORENA", "senha": "luc1549", "setinhas": 8, "tecla_inicial": "m",
-        "controle_caixa": (332, 536)
-    },
-    "Alto de Pinheiros": {
-        "login": "LJALTOPINHEIROS", "senha": "AVATIM231", "setinhas": 6, "tecla_inicial": "m",
-        "controle_caixa": (359, 532)
-    },
-    "Ibirapuera": {
-        "login": "LJIBIRAPUERA", "senha": "AVATIM123", "setinhas": 7, "tecla_inicial": "m",
-        "controle_caixa": (361, 535)
-    },
-    "Perdizes": {
-        "login": "LJF2PERDIZES", "senha": "avatim123", "setinhas": 10, "tecla_inicial": "f",
-        "controle_caixa": (398, 501)
-    },
-    "Leopoldina": {
-        "login": "LJVLEOPOLDINA", "senha": "AVATIM123", "setinhas": 12, "tecla_inicial": "f",
-        "controle_caixa": (361, 504)
-    },
-    "Santana": {
-        "login": "LJF2SANTANA", "senha": "AVATIM123", "setinhas": 11, "tecla_inicial": "f",
-        "controle_caixa": (365, 506)
-    }
+    "Mooca": {"login": "ljmooca", "senha": "luc1549", "setinhas": 9, "tecla_inicial": "m", "controle_caixa": (324, 504)},
+    "Lorena": {"login": "LJALORENA", "senha": "luc1549", "setinhas": 8, "tecla_inicial": "m", "controle_caixa": (332, 536)},
+    "Alto de Pinheiros": {"login": "LJALTOPINHEIROS", "senha": "AVATIM231", "setinhas": 6, "tecla_inicial": "m", "controle_caixa": (359, 532)},
+    "Ibirapuera": {"login": "LJIBIRAPUERA", "senha": "AVATIM123", "setinhas": 7, "tecla_inicial": "m", "controle_caixa": (361, 535)},
+    "Perdizes": {"login": "LJF2PERDIZES", "senha": "avatim123", "setinhas": 10, "tecla_inicial": "f", "controle_caixa": (398, 501)},
+    "Leopoldina": {"login": "LJVLEOPOLDINA", "senha": "AVATIM123", "setinhas": 12, "tecla_inicial": "f", "controle_caixa": (361, 504)},
+    "Santana": {"login": "LJF2SANTANA", "senha": "AVATIM123", "setinhas": 11, "tecla_inicial": "f", "controle_caixa": (365, 506)}
 }
 
-# Caminho do Chrome
 chrome_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
 exatto_url = "https://portalfranquias.avatim.com.br/"
-
-# Caminho da planilha F360
-planilha_f360 = r"C:\Users\PERFIL\Downloads\Planilha F360.xlsx"
+caminho_destino = r"C:\Users\PERFIL\Documents\Controle de Caixa"
+os.makedirs(caminho_destino, exist_ok=True)
+planilha_f360 = os.path.join(caminho_destino, "Planilha F360.xlsx")
 caminho_downloads = r"C:\Users\PERFIL\Downloads"
 
-# Calcula datas automaticamente
+# Calcula datas
 hoje = datetime.today()
 ontem = hoje - timedelta(days=1)
-
-if hoje.weekday() == 0:  # segunda-feira
+if hoje.weekday() == 0:
     sexta = hoje - timedelta(days=3)
     domingo = hoje - timedelta(days=1)
     DATA_INICIAL = sexta.strftime("%d/%m/%Y")
@@ -63,77 +40,70 @@ else:
 print(f"📅 Período: {DATA_INICIAL} até {DATA_FINAL}")
 
 # -------------------------------
-# Função para processar uma loja
+# Função para processar loja (mantida do seu código original)
 # -------------------------------
 def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial, controle_caixa):
     print(f"\n🔄 Processando loja: {nome_loja}")
 
-    # Abre navegador
     subprocess.Popen([chrome_path, exatto_url])
-    time.sleep(3.5)
+    time.sleep(5)
 
-    # Login com coordenadas ajustadas
-    pyautogui.click(x=697, y=423)  # Campo usuário
+    pyautogui.click(x=697, y=423)
     pyautogui.hotkey("ctrl", "a"); pyautogui.press("backspace")
     pyautogui.write(login)
 
-    pyautogui.click(x=473, y=490)  # Campo senha
+    pyautogui.click(x=473, y=490)
     pyautogui.hotkey("ctrl", "a"); pyautogui.press("backspace")
     pyautogui.write(senha)
 
     pyautogui.click(x=610, y=549)
-    time.sleep(0.5)
-    pyautogui.press(tecla_inicial)   # usa 'm' ou 'f' conforme a loja
-    time.sleep(0.5)
+    time.sleep(1)
+    pyautogui.press(tecla_inicial)
+    time.sleep(1)
     for _ in range(setinhas):
         pyautogui.press("down")
-        time.sleep(0.1)
+        time.sleep(0.2)
     pyautogui.press("enter")
 
     pyautogui.click(x=1035, y=549)
-    time.sleep(2)
+    time.sleep(3)
 
-    # Consultas > Controle de Caixa
-    pyautogui.click(x=276, y=253)  # Botão Consultas
+    pyautogui.click(x=276, y=253)
     time.sleep(1)
     x_cc, y_cc = controle_caixa
-    pyautogui.click(x=x_cc, y=y_cc)  # Botão Controle de Caixa
+    pyautogui.click(x=x_cc, y=y_cc)
     time.sleep(2)
 
-    # Preenche datas
-    pyautogui.click(x=200, y=458)  # Data Inicial
+    pyautogui.click(x=200, y=458)
     pyautogui.hotkey("ctrl", "a"); pyautogui.press("backspace")
     pyautogui.write(DATA_INICIAL)
 
-    pyautogui.click(x=198, y=483)  # Data Final
+    pyautogui.click(x=198, y=483)
     pyautogui.hotkey("ctrl", "a"); pyautogui.press("backspace")
     pyautogui.write(DATA_FINAL)
 
-    # Pesquisar
     pyautogui.click(x=1000, y=560)
     time.sleep(3)
 
-    # Rola a tela
     pyautogui.moveTo(x=1300, y=600)
-    time.sleep(0.5)
+    time.sleep(1)
     for _ in range(2):
         pyautogui.scroll(-1000)
         time.sleep(1)
 
-    # --- LIMPEZA DE ARQUIVOS ANTIGOS ---
     for f in os.listdir(caminho_downloads):
         if f.startswith("Result") and f.endswith(".xls"):
             os.remove(os.path.join(caminho_downloads, f))
 
-    # Exportar
     pyautogui.click(x=1052, y=482)
-    time.sleep(5)  # espera o download terminar
+    time.sleep(7)
 
-    # -------------------------------
-    # 📊 Processamento com pandas
-    # -------------------------------
-    arquivo_exportado = os.path.join(caminho_downloads, "Result.xls")
-    tables = pd.read_html(arquivo_exportado, header=0)
+    arquivo_download = os.path.join(caminho_downloads, "Result.xls")
+    arquivo_destino = os.path.join(caminho_destino, "Result.xls")
+    if os.path.exists(arquivo_download):
+        shutil.move(arquivo_download, arquivo_destino)
+
+    tables = pd.read_html(arquivo_destino, header=0)
     df = tables[0]
     df = df.drop(columns=["ABERTURA", "FECHAMENTO"], errors="ignore")
 
@@ -150,13 +120,11 @@ def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial, controle_ca
     book = load_workbook(planilha_f360)
     sheet = book["Modelo de Importação de GFF-PDV"]
 
-    # Limpa linhas antigas
     max_row = sheet.max_row
     for row in range(3, max_row+1):
         for col in range(1, sheet.max_column+1):
             sheet.cell(row=row, column=col).value = None
 
-    # Insere novos dados
     start_row = 3
     for i, row in df_f360.iterrows():
         sheet.cell(row=start_row+i, column=1, value=row["Data Venda"])
@@ -168,23 +136,59 @@ def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial, controle_ca
 
     book.save(planilha_f360)
 
-    # Cria cópia com nome da loja + data
-    data_str = datetime.today().strftime("%d-%m-%Y")
-    copia_planilha = os.path.join(caminho_downloads, f"{nome_loja}_{data_str}.xlsx")
+    data_str = (datetime.today() - timedelta(days=1)).strftime("%d-%m-%Y")
+    copia_planilha = os.path.join(caminho_destino, f"{nome_loja}_{data_str}.xlsx")
     shutil.copy(planilha_f360, copia_planilha)
 
     print(f"✅ Loja {nome_loja} processada. Cópia criada: {copia_planilha}")
-
+    return copia_planilha
 
 # -------------------------------
-# Loop para todas as lojas
+# Função para upload no F360 (nova)
 # -------------------------------
-for nome_loja, config in lojas.items():
-    processar_loja(
-        nome_loja,
-        config["login"],
-        config["senha"],
-        config["setinhas"],
-        config["tecla_inicial"],
-        config["controle_caixa"]
-    )
+def upload_f360(lista_arquivos):
+    subprocess.Popen([chrome_path, "https://financas.f360.com.br/"])
+    time.sleep(7)
+
+    pyautogui.click(x=1211, y=426)
+    pyautogui.write("pedro.noronha@manjos.com.br")
+
+    pyautogui.click(x=902, y=429)
+    pyautogui.write("Adm2025!")
+
+    pyautogui.click(x=927, y=550)
+    time.sleep(7)
+
+    pyautogui.click(x=158, y=586)
+    time.sleep(3)
+    pyautogui.scroll(-500)
+    time.sleep(3)
+
+    pyautogui.click(x=378, y=339)
+    time.sleep(3)
+
+    for arquivo in lista_arquivos:
+        pyautogui.write(arquivo)
+        pyautogui.press("enter")
+        time.sleep(2)
+
+    print("📤 Upload concluído para todos os arquivos.")
+
+# -------------------------------
+# Execução principal
+# -------------------------------
+if __name__ == "__main__":
+    arquivos_gerados = []
+    for nome_loja, config in lojas.items():
+        copia_planilha = processar_loja(
+            nome_loja,
+            config["login"],
+            config["senha"],
+            config["setinhas"],
+            config["tecla_inicial"],
+            config["controle_caixa"]
+        )
+        arquivos_gerados.append(copia_planilha)
+
+    # 🚀 Agora faz o upload no F360
+    upload_f360(arquivos_gerados)
