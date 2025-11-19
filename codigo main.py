@@ -137,7 +137,7 @@ def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial, controle_ca
     book.save(planilha_f360)
 
     data_str = (datetime.today() - timedelta(days=1)).strftime("%d-%m-%Y")
-    copia_planilha = os.path.join(caminho_destino, f"{nome_loja}_{data_str}.xlsx")
+    copia_planilha = os.path.join(caminho_destino, f"{nome_loja}_{data_str}.xls")
     shutil.copy(planilha_f360, copia_planilha)
 
     print(f"✅ Loja {nome_loja} processada. Cópia criada: {copia_planilha}")
@@ -148,23 +148,30 @@ def processar_loja(nome_loja, login, senha, setinhas, tecla_inicial, controle_ca
 # -------------------------------
 def upload_f360(lista_arquivos):
     subprocess.Popen([chrome_path, "https://financas.f360.com.br/"])
-    time.sleep(7)
+    time.sleep(5)
 
-    pyautogui.click(x=1211, y=426)
+    pyautogui.click(x=159, y=583)
+    time.sleep(1)
+
+    pyautogui.click(x=1271, y=340)
     pyautogui.write("pedro.noronha@manjos.com.br")
 
-    pyautogui.click(x=902, y=429)
+    pyautogui.click(x=895, y=422)
     pyautogui.write("Adm2025!")
 
-    pyautogui.click(x=927, y=550)
-    time.sleep(7)
-
-    pyautogui.click(x=158, y=586)
+    pyautogui.click(x=900, y=535)
     time.sleep(3)
-    pyautogui.scroll(-500)
+    pyautogui.click(x=900, y=535)
+    time.sleep(10)
+
+    pyautogui.moveTo(x=159, y=583)
+    time.sleep(1)
+    pyautogui.scroll(-120)
+    time.sleep(3)
+    pyautogui.click(x=159, y=583)
     time.sleep(3)
 
-    pyautogui.click(x=378, y=339)
+    pyautogui.click(x=387, y=346)
     time.sleep(3)
 
     for arquivo in lista_arquivos:
